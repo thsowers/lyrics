@@ -3,13 +3,12 @@ extern crate clap;
 extern crate reqwest;
 extern crate select;
 
-use std::env;
 use select::document::Document;
 use select::predicate::Class;
 use reqwest::StatusCode::NotFound;
 
 fn main() {
-    let matches = clap_app!(myapp =>
+    let matches = clap_app!(lyrics =>
         (version: "0.1.0")
         (author: "Tyler H. Sowers <thsowers@gmail.com>")
         (about: "Lookup lyrics")
