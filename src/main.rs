@@ -16,6 +16,7 @@ fn main() {
         (@arg TRACK: +required "Track to search for")
     ).get_matches();
 
+    // Get args
     let artist = str::replace(matches.value_of("ARTIST").unwrap(), " ", "_");
     let song = str::replace(matches.value_of("TRACK").unwrap(), " ", "_");
 
@@ -23,22 +24,34 @@ fn main() {
 }
 
 fn get_data(artist: &str, song: &str) {
+    // Fetch Data
     let url = &format!("{}{}:{}", "http://lyrics.wikia.com/wiki/", artist, song);
     let res = reqwest::get(url).unwrap();
 
     if res.status() == StatusCode::NOT_FOUND {
         println!("Lyrics not found");
-        return;
+        return; // TODO: Fallback to alternative services
     }
 
+    // Parse HTML and pretty print results
     Document::from_read(res).unwrap()
         .find(Class("lyricbox"))
         .for_each(|x| pretty_print(x.inner_html()));
 }
 
 fn pretty_print(lyrics: String) {
-    println!("{}", "");
+
+    // Add linebreaks
     let mut res = str::replace(&lyrics, "<div class=\"lyricsbreak\"></div>", "\n");
     res = str::replace(&res, "<br>", "\n");
-    print!("{}", res)
+
+    // Split string by newlines
+    let lines = res.split("\n");
+
+    // Spacer
+    println!("{}", "");
+    for line in lines {
+        // Print with some indentation
+        println!("{}", format!("  {0: ^2} {1:}", "", line));
+    }
 }
