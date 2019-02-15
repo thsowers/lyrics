@@ -5,7 +5,7 @@ extern crate select;
 
 use select::document::Document;
 use select::predicate::Class;
-use reqwest::StatusCode::NotFound;
+use reqwest::StatusCode;
 
 fn main() {
     let matches = clap_app!(lyrics =>
@@ -26,7 +26,7 @@ fn get_data(artist: &str, song: &str) {
     let url = &format!("{}{}:{}", "http://lyrics.wikia.com/wiki/", artist, song);
     let res = reqwest::get(url).unwrap();
 
-    if res.status() == NotFound {
+    if res.status() == StatusCode::NOT_FOUND {
         println!("Lyrics not found");
         return;
     }
