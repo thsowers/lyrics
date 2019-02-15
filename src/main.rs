@@ -52,6 +52,6 @@ fn pretty_print(lyrics: String) {
     println!("{}", "");
     for line in lines {
         // Print with some indentation
-        println!("{}", format!("  {0: ^2} {1:}", "", line));
+        println!("{:indent$}{}", "", line, indent=4);
     }
 }
